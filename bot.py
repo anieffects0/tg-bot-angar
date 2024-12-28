@@ -145,23 +145,26 @@ def main():
 
     # Обработчик опроса
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("start", start)],
-        states={
-            NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_name)],
-            QUESTION_1: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_1)],
-            QUESTION_2: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_2)],
-            QUESTION_3: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_3)],
-            QUESTION_4: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_4)],
-            FILE: [
-                MessageHandler(filters.PHOTO | filters.Document.ALL, file_handler),
-                CallbackQueryHandler(send_data, pattern='^send_data$'),
-            ],
-        },
-        fallbacks=[
-            CommandHandler("cancel", cancel),  # Завершение разговора
-            CallbackQueryHandler(start_new, pattern='^start_new$')  # Обработчик кнопки "Начать"
+    entry_points=[CommandHandler("start", start)],
+    states={
+        NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_name)],
+        QUESTION_1: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_1)],
+        QUESTION_2: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_2)],
+        QUESTION_3: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_3)],
+        QUESTION_4: [MessageHandler(filters.TEXT & ~filters.COMMAND, question_4)],
+        FILE: [
+            MessageHandler(filters.PHOTO | filters.Document.ALL, file_handler),
+            CallbackQueryHandler(send_data, pattern='^send_data$'),
         ],
-    )
+    },
+    fallbacks=[
+        CommandHandler("cancel", cancel),
+        CallbackQueryHandler(start_new, pattern='^start_new$'),
+    ],
+)
+
+
+
 
     application.add_handler(conv_handler)
 
